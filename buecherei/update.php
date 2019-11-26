@@ -53,7 +53,7 @@ if ($_GET['id']) {
            </tr>
            <tr>
                <th >Image</th>
-               <td><input type ="text" name= "image" placeholder= "image" value= "<?php echo $data['image'] ?>" /></td>
+               <td><input type ="file" name= "file"  value= "<?php echo $file['image'] ?>" /></td>
            </tr>
            <tr>
                <th >Description</th>

@@ -3,25 +3,23 @@
 require_once 'db_connect.php';
 
 if ($_POST) {
-   
-   $ti = $_POST['title'];
-   $IS = $_POST['ISBN'];
-   $ty = $_POST['type'];
-   $img = $_POST[ 'image'];
-   $des = $_POST[ 'description'];
-   $py = $_POST[ 'pub_year'];
-   $an= $_POST[ 'author_name'];
-   $as = $_POST[ 'author_surname'];
-   $pub = $_POST[ 'publisher'];
-   $add = $_POST[ 'address'];
-   $si = $_POST[ 'size'];
    $id = $_POST['id'];
+   $ti = $_POST['title'];
+   $ty =$_POST['type'];
+   $IS = $_POST['ISBN'];
+   $des = $_POST['description'];
+   $py = $_POST['pub_year'];
+   $an= $_POST['author_name'];
+   $as = $_POST['author_surname'];
+   $pub = $_POST['publisher'];
+   $add = $_POST['address'];
+   $si = $_POST['size'];
+   
 
    $sql = "UPDATE media SET 
    title = '$ti', 
    ISBN = '$IS', 
    type = '$ty', 
-   image = '$img', 
    description = '$des', 
    pub_year = '$py', 
    author_name = '$an', 
