@@ -4,58 +4,67 @@ error_reporting(E_ERROR | E_PARSE);
   $conn = mysqli_connect("localhost","root","","cr10_chingying_huang_biglibrary");
 // !!! "upload" is a name of database, please create one
   if(isset($_POST["submit"])){
-  $ti = $_POST['title'];
+   $ti = $_POST['title'];
    $ty =$_POST['type'];
    $IS = $_POST['ISBN'];
    $des = $_POST['description'];
    $py = $_POST['pub_year'];
    $an= $_POST['author_name'];
-   $as = $_POST['author_surname'];
    $pub = $_POST['publisher'];
    $add = $_POST['address'];
-   $si = $_POST['size'];
+  
 
+   
    
 //Check that we have a file and i don't have any error
 if((!empty($_FILES["file"])) && ($_FILES['file']['error'] == 0)) {
-  //Check if the file is JPEG image and it's size is less than 350Kb
-  $filename = basename($_FILES['file']['name']);
-  $ext = substr($filename, strrpos($filename, '.') + 1);
-  if (($ext == "jpg") && ($_FILES["file"]["type"] == "image/jpeg") && 
-  ($_FILES["file"]["size"] < 35000000)) {
-    //Determine the path to which we want to save this file
-      $filename = dirname(FILE).'/uploads/'.$filename;
-// !!!  "uploads" is a folder inside of the main folder
-      //Check if the file with the same name is already exists on the server
-      if (!file_exists($filename)) {
-        //Attempt to move the uploaded file to it's new place
-        if ((move_uploaded_file($_FILES['file']['tmp_name'],$filename))) {
-           $sql = "INSERT INTO media (title,  image, type, ISBN, description, pub_year, author_name, author_surname, publisher, address, size) VALUES ('$ti', '$filename', '$ty', '$IS','$des','$py','$an','$as','$pub','$add','$si')";
 
-   
+  
+// $filename = basename($_FILES['file']['name']);
+$filename = $_FILES['file']['name'];
+$fileTmpName = $_FILES['file']['tmp_name'];
+$fileSize = $_FILES['file']['size'];
+$fileError = $_FILES['file']['error'];
+$fileType = $_FILES['file']['type'];
+$ext = substr($filename, strrpos($filename, '.') + 1);
+$allowed = array('jpg','jpeg','png');
 
-    if($conn->query($sql) === TRUE) {
-       echo "<p>New Record Successfully Created</p>" ;
-       echo "<a href='create.php'><button type='button'>Back</button></a>";
-        echo "<a href='index.php'><button type='button'>Home</button></a>";
-   } else  {
-       echo "Error " . $sql . ' ' . $conn->connect_error;
-   }
+ if (in_array($ext, $allowed)) { 
+  
+  if ($fileSize < 1000000) 
+  {
 
-   $conn->close();
-        } else {
-           echo "Error: A problem occurred during file upload!";
-        }
-      } else {
-         echo "Error: File ".$_FILES["file"]["name"]." already exists";
-      }
-  } else {
-     echo "Error: Only .jpg images under 350Kb are accepted for upload";
-  }
-} else {
- echo "Error: No file uploaded";
+      $fileDestination = 'uploads/'.$filename;
+             
+             if ((move_uploaded_file($_FILES['file']['tmp_name'], $fileDestination))) 
+             {
+                      
+
+                        $sql = "INSERT INTO media (title,  image, type, ISBN, description, pub_year, author_name,  publisher, address) VALUES ('$ti', '$fileDestination', '$ty', '$IS','$des','$py','$an','$pub','$add')";
+      
+                        if($conn->query($sql) === TRUE) {
+
+
+                                  echo "<p>New Record Successfully Created</p>" ;
+                                  echo "<a href='create.php'><button type='button'>Continue to create</button></a>";
+                                  echo "<a href='index.php'><button type='button'>Home</button></a>";
+                                                        } else  {echo "Error " . $sql . ' ' . $conn->connect_error;}
+
+       
+              } else {echo "Error: A problem occurred during file upload!"; }
+
+                           
+   } else { echo "Error: images under 350Kb are accepted for upload";  }//  check image size
+              
+  } else {echo "Error: please check if your image is .jpg /.jpeg/.png ";  }
+        
+
 }
 }
+         $conn->close();
+                             
+
+ 
 ?>
 
 
@@ -91,19 +100,19 @@ if((!empty($_FILES["file"])) && ($_FILES['file']['error'] == 0)) {
    <div class="form-group">
       <!-- <label for="file">Image</label> -->
      <!--  <input type="file" name="file" id="file" class="form-control"> -->
-    <input type="hidden" name="MAX_FILE_SIZE" value="1000000"  />
+    <input type="hidden" name="MAX_FILE_SIZE" value="3500000"  />
     Select image<input name="file" type="file" class="form-control" />
    </div>
 
     <div class="form-group">
       <label for="text">Type</label>
-      <input type="text" name="type" id="text" class="form-control">
+      <input type="text" name="type" id="type" class="form-control">
      
    </div>
 
     <div class="form-group">
       <label for="text">ISBN</label>
-      <input type="text" name="ISBN" id="text" class="form-control">
+      <input type="text" name="ISBN" id="ISBN" class="form-control">
      
    </div>
 
@@ -126,13 +135,6 @@ if((!empty($_FILES["file"])) && ($_FILES['file']['error'] == 0)) {
    </div>
 
    <div class="form-group">
-      <label for="text">Author_surname</label>
-      <input type="text" name="author_surname" id="author_surname" class="form-control">
-     
-   </div>
-   
-
-    <div class="form-group">
       <label for="text">Publisher</label>
       <input type="text" name="publisher" id="publisher" class="form-control">
      
@@ -144,13 +146,8 @@ if((!empty($_FILES["file"])) && ($_FILES['file']['error'] == 0)) {
      
    </div>
 
-    <div class="form-group">
-      <label for="text">Size</label>
-      <input type="text" name="size" id="size" placeholder ="small/medium/big " class="form-control">
-     
-   </div>
-
-   <input type="submit" name="submit" value="Sumbit" class="btn btn-info">
+    
+   <button type="submit" name="submit" value="Submit" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Submit</button>
    </form>
   </div>
   

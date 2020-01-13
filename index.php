@@ -8,41 +8,45 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- fontawsome -->
+    <script src="https://kit.fontawesome.com/473562d7d7.js" crossorigin="anonymous"></script>
    
 </head>
 <body>
-<h1 class="text-white bg-info text-center">Library data system</h1>
+  <div class="col-12 border-1 " >
+     <img src="uploads/header.jpg" height="200px" class=" w-100">
+     <h1 class="text-white bg-info text-center p-1">Library data system</h1>
+   </div><!-- /header -->
+
 <div class ="container">
 
-  
 
-  <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" href="#">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">login</a>
-  </li>
+            <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                       <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                       <a class="nav-link text-secondary" href= "create.php" type="button">Add media</a>
+                    </li>
+           
+           
+              </ul>
  
- 
-</ul>
-  <a href= "create.php"><button type="button" >Add media</button></a>
-  <div class="table-responsive">
+  <div class="table-responsive my-2">
     <table class="table table-bordered table-stripe">
       <thead>
                <th>Media ID</th>
+               <th>Edit</th>
                <th>Title</th>
                <th>Image</th>
                <th>Type</th>
                <th>ISBN</th>
-               <th>Description</th>
                <th>Published year</th>
                <th>Author Name</th>
-               <th>Author Surame</th>
                <th>Publisher</th>
                <th>Publisher address</th>
-               <th>size of Publisher</th>
-               <th>Edit</th>
+               
       </thead>
       <tbody>
       <?php
@@ -54,28 +58,12 @@
              $files =$_FILES['file'];
              $ty =$_POST['type'];
              $IS = $_POST['ISBN'];
-             $des = $_POST['description'];
              $py = $_POST['pub_year'];
              $an= $_POST['author_name'];
-             $as = $_POST['author_surname'];
              $pub = $_POST['publisher'];
              $add = $_POST['address'];
-             $si = $_POST['size'];
-
-          print_r($title);
-          print_r($type);
-          print_r($ISBN);
-          print_r($description);
-          print_r($pub_year);
-          print_r($author_name);
-          print_r($author_surname);
-          print_r($publisher);
-          print_r($address);
-          print_r($size);
+                         
       
-
-          echo "<br>";
-
           $filename =$files['name'];
           $fileerror =$files['error'];
           $filetmp =$files['tmp_name'];
@@ -89,7 +77,7 @@
            $destinationfile = 'uploads/'.$filename;
            move_uploaded_file($filetmp,$destinationfile);
 
-           $q = "INSERT INTO media (title, image, type, ISBN,  description, pub_year, author_name, author_surname, publisher, address, size) VALUES ('$ti', '$destinationfile', '$ty', '$IS','$des','$py','$an','$as','$pub','$add','$si')";
+           $q = "INSERT INTO media (title, image, type, ISBN,  pub_year, author_name,  publisher, address) VALUES ('$ti', '$destinationfile', '$ty', '$IS','$py','$an','$pub','$add')";
 
            $query = mysqli_query($con, $q);
          }
@@ -105,21 +93,19 @@
 
             <tr>
               <td><?php echo $result['id']; ?> </td>
+              <td class="justify-content-between pr-1"><a href="update.php?id=<?= $result['id'] ?>"><button type='button'><i class="fas fa-pencil-alt"></i></button></a>
+                  <a href="delete.php?id=<?php echo $result['id'] ?>"><button type='button'><i class="far fa-trash-alt"></i></button></a>
+                  <a href="item.php?id=<?php echo $result['id'] ?>"><button type='button'><i class="fas fa-info-circle"></i></button></a>
+              </td>
               <td><?php echo $result['title']; ?> </td>
-              <td><img src="uploads/<?php echo $result['image']; ?>" height="100px" width="100px"></td>
+              <td><img src="<?php echo $result['image']; ?>" height="100px" width="100px"></td>
               <td><?php echo $result['type']; ?> </td>
               <td><?php echo $result['ISBN']; ?> </td>
-              <td><?php echo $result['description']; ?> </td>
               <td><?php echo $result['pub_year']; ?> </td>
               <td><?php echo $result['author_name']; ?> </td>
-              <td><?php echo $result['author_surname']; ?> </td>
               <td><?php echo $result['publisher']; ?> </td>
               <td><?php echo $result['address']; ?> </td>
-              <td><?php echo $result['size']; ?> </td>
-              <td><a href="update.php?id=<?= $result['id'] ?>"><button type='button'>Edit</button></a>
-                  <a href="delete.php?id=<?php echo $result['id'] ?>"><button type='button'>Delete</button></a>
-                  <a href="item.php?id=<?php echo $result['id'] ?>"><button type='button'>Details</button></a>
-              </td>
+              
 
 
             </tr>

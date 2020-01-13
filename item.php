@@ -22,7 +22,6 @@ require_once 'actions/db_connect.php';
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     
-    <link href="signin.css" rel="stylesheet">
 
 </head>
 <body >
@@ -40,7 +39,7 @@ require_once 'actions/db_connect.php';
   <li class="nav-item">
     <a class="nav-link" href="#">login</a>
   </li>
-    <div class="row">
+    <div class="row d-flex justify-content-between">
         
    
     <?php
@@ -98,17 +97,16 @@ require_once 'actions/db_connect.php';
            foreach ($row as $result) {
             ?>
            
-<div class="card col-4 pt-2" >
-<img class="card-img-top" src="uploads/<?php echo $result['image']; ?>" height="200px" width="100px" style="object-fit:cover">
+<div class=" col-4 pt-2" >
+<img class="card-img-top" src="<?php echo $result['image']; ?>" height="200px" width="100px" style="object-fit:cover">
   
   <div class="card-body">
     <h4 class="card-title"><?php echo $result['title']; ?></h4>
-    <p class="card-text"><?php echo $result['type']; ?></p>
-    <p class="card-text"><?php echo $result['ISBN']; ?></p>
-    <p class="card-text"><?php echo $result['description']; ?></p>
-    <p class="card-text"><?php echo $result['pub_year']; ?></p>
-    <p class="card-text"><?php echo $result['author_name']; ?></p>
-    <p class="card-text"><?php echo $result['author_surname']; ?></p>
+    <p class="card-text">Type:<?php echo $result['type']; ?></p>
+    <p class="card-text">ISBN:<?php echo $result['ISBN']; ?></p>
+    <p class="card-text">Summary:<?php echo $result['description']; ?></p>
+    <p class="card-text">Publish year:<?php echo $result['pub_year']; ?></p>
+    <p class="card-text">Author Name<?php echo $result['author_name']; ?></p>
     <p class="card-text"><?php echo $result['publisher']; ?></p>
     
   </div>
